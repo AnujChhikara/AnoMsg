@@ -1,4 +1,3 @@
-
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,9 +14,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
 import { signInSchema } from '@/schemas/signInSchema';
+import { useRouter } from 'next/navigation';
 
 export default function SignInForm() {
   const router = useRouter();
@@ -38,18 +37,25 @@ export default function SignInForm() {
       password: data.password,
     });
 
-    if (!result?.ok) {
-     
+    if (result?.error) {
+      if (result.error === 'CredentialsSignin') {
         toast({
           title: 'Login Failed',
           description: 'Incorrect username or password',
           variant: 'destructive',
         });
-     
+      } else {
+        toast({
+          title: 'Error',
+          description: result.error,
+          variant: 'destructive',
+        });
+      }
     }
-   console.log(result)
+    console.log(result)
     if (result?.ok) {
-      router.replace('/dashboard');
+      console.log('trig')
+      router.push('/dashboard');
     }
   };
 
